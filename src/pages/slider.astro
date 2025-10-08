@@ -1,0 +1,95 @@
+---
+import GraphicSpecies from "../components/GraphicSpecies.astro";
+import penguins from "../assets/penguins.json";
+
+// Liste d'espèces déterminée automatiquement
+const speciesList = [...new Set(penguins.map((p) => p.species).filter(Boolean))].sort();
+
+// utilitaire simple pour créer des id/ancres sûres
+function slug(s) {
+  return String(s).toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9\-]/g, "");
+}
+---
+
+<main style="background: linear-gradient(90deg, #e0eafc 0%, #cfdef3 100%); min-height: 100vh; padding: 2rem;">
+  <nav>
+    <a href="/" style="margin:0 1rem; color:#0a598d; font-weight:bold; text-decoration:none;">Home</a> |
+    <a href="/test-iframe" style="margin:0 1rem; color:#0a598d; font-weight:bold; text-decoration:none;">Visualisation par IFRAME</a> |
+    <a href="/tabs" style="margin:0 1rem; color:#0a598d; font-weight:bold; text-decoration:none;">Comparaison par onglets</a>
+  </nav>
+
+  <h1 style="text-align:center; font-size:2.5rem; margin-bottom:1.5rem; color:#1a2129;">Comparaison graphique des espèces</h1>
+
+  <nav style="text-align:center; margin-bottom:2rem;">
+    <select id="species-anchor-select" style="font-size:1.2rem; padding:0.5rem 1rem; background:#dee9ff; border:1px solid #18aa25; border-radius:0.5rem;">
+      {speciesList.map((s) => (
+        <option value={slug(s)}>{s}</option>
+      ))}
+    </select>
+  </nav>
+
+  <div class="slider">
+    {speciesList.map((s) => (
+      <section id={slug(s)} class="slide">
+        <h2 style="text-align:center; margin-top:0.5rem;">{s}</h2>
+        <GraphicSpecies species={s} />
+      </section>
+    ))}
+  </div>
+</main>
+
+<style>
+.slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  width: 42%;
+  gap: 0.75rem;
+  align-items: align-center;
+  padding-bottom: 1rem;
+}
+.slider section {
+  min-width: 600px;
+  flex: 0 0 auto;
+  scroll-margin-left: 2rem;
+  border: 1px solid #18aa25;
+  background: #fff;
+  border-radius: 1rem;
+  margin: 0.5rem 0;
+  padding: 1rem;
+  transition: box-shadow 0.2s;
+}
+.slide:hover {
+  box-shadow: 0 8px 32px rgba(44,62,80,0.16);
+}
+@media (max-width: 700px) {
+  .slide {
+    min-width: 90vw;
+    max-width: 95vw;
+  }
+}
+</style>
+
+<script>
+window.addEventListener('load', function () {
+  const select = document.getElementById('species-anchor-select');
+  if (!select) return;
+  select.addEventListener('change', function (evt) {
+    const value = (evt.target && evt.target.value) ? evt.target.value : null;
+    if (!value) return;
+    location.hash = value;
+    const section = document.getElementById(value);
+    if (section) section.scrollIntoView({ behavior: 'smooth', inline: 'start' });
+  });
+
+  // si l'URL contient un hash au chargement, faire défiler vers cet élément
+  const hash = location.hash?.replace(/^#/, '');
+  if (hash) {
+    const el = document.getElementById(hash);
+    if (el) el.scrollIntoView({ behavior: 'smooth', inline: 'start' });
+    // synchroniser le select
+    const option = Array.from(select.options).find(o => o.value === hash);
+    if (option) select.value = hash;
+  }
+});
+</script>

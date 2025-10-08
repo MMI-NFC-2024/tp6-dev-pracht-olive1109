@@ -1,0 +1,57 @@
+---
+import PlotFigure from "../components/PlotFigure.astro";
+import * as Plot from "@observablehq/plot";
+import penguins from '../assets/penguins.json';
+const { species } = Astro.props;
+const filtered = penguins.filter(p => p.species === species);
+---
+
+<div class="graphic-species">
+  <h3>{species}</h3>
+  <p class="count">Nombre d'individus : <strong>{filtered.length}</strong></p>
+  <div class="plot-wrapper">
+    <PlotFigure
+      options={{
+        marks: [
+          Plot.dot(filtered, {
+            x: "culmen_length_mm",
+            y: "culmen_depth_mm",
+            stroke: "species",
+          }),
+        ],
+      }}
+    />
+  </div>
+</div>
+
+<style>
+.graphic-species {
+  width: 100%;
+  margin: 0 auto;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.graphic-species h3 {
+  font-size: 1.7rem;
+  color: #1a2129;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+}
+.graphic-species .count {
+  font-size: 1.1rem;
+  color: #0a598d;
+  margin-bottom: 1.2rem;
+}
+.plot-wrapper {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 0.7rem;
+  box-shadow: 0 1px 8px rgba(44,62,80,0.07);
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
