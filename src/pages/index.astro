@@ -1,11 +1,87 @@
 ---
-import Layout from "../layouts/Layout.astro";
 ---
+<main class="home">
+  <section class="hero">
+    <h1>Bienvenue sur le TP6</h1>
+    <p class="lead">Visualisations interactive des jeux de donnees - penguins et autres. Choisis une vue ci-dessous.</p>
 
-<Layout>
-  <h1 class="text-4xl font-bold text-center my-8 text-gray-800">Bienvenue sur le TP6</h1>
-  <nav>
-    <a href="/" class="text-blue-600 hover:underline">Accueil</a> | 
-    <a href="/slider" class="text-blue-600 hover:underline">Slider</a>
-  </nav>
-</Layout>
+    <nav class="home-nav" aria-label="Navigation principale"> 
+      <a class="btn" href="/penguin/rendu-dynamique">Rendu dynamique</a>
+      <a class="btn" href="/penguin/rendu-statique">Rendu statique</a>
+      <a class="btn" href="/penguin/slider">Comparaison par slider</a>
+      <a class="btn" href="/pizza/slider">Comparaison par slider (pizza)</a>
+    </nav>
+
+    <p class="small">Developpe avec Astro . Lance le serveur dev : <code>npm run dev</code></p>
+  </section>
+</main>
+
+<style>
+:root{
+  --accent: #0a598d;
+  --muted: #6b7280;
+  --bg: #f6fafc;
+  --card: #ffffff;
+}
+
+.home{
+  min-height: calc(100vh - 80px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:2rem;
+  background: linear-gradient(180deg, var(--bg), #eef6fb);
+  box-sizing:border-box;
+}
+
+.hero{
+  width:100%;
+  max-width:980px;
+  background:var(--card);
+  border:1px solid rgba(10,89,141,0.06);
+  border-radius:12px;
+  padding:2rem;
+  text-align:center;
+  box-shadow:0 8px 30px rgba(20,40,60,0.04);
+}
+
+.hero h1{
+  margin:0 0 0.5rem 0;
+  color:var(--accent);
+  font-size:2rem;
+}
+
+.lead{
+  margin:0 0 1.25rem 0;
+  color:var(--muted);
+}
+
+.home-nav{
+  display:flex;
+  gap:0.75rem;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-bottom:1rem;
+}
+
+.btn{
+  display:inline-block;
+  padding:0.6rem 1rem;
+  background:linear-gradient(180deg,#0f6aa8,#09507a);
+  color:#fff;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:600;
+  box-shadow:0 6px 18px rgba(9,80,122,0.12);
+  transition:transform .12s, box-shadow .12s;
+}
+.btn:hover{ transform:translateY(-3px); box-shadow:0 14px 34px rgba(9,80,122,0.14); }
+
+.small{ color:var(--muted); font-size:0.9rem; margin-top:0.5rem; }
+
+@media (max-width:600px){
+  .hero{ padding:1.25rem; border-radius:10px; }
+  .hero h1{ font-size:1.5rem; }
+  .home-nav{ gap:0.5rem; }
+}
+</style>
