@@ -1,0 +1,118 @@
+---
+import penguins from "../../../assets/penguins.json";
+import GraphicSpecies from "../../../components/GraphicSpecies.astro";
+import Layout from "../../../layouts/Layout.astro";
+
+export const prerender = false;
+
+const { species } = Astro.params;
+const decodedSpecies = decodeURIComponent(species);
+const filtered = penguins.filter((p) => p.species === decodedSpecies);
+---
+<Layout>
+  <main class="page">
+    <div class="card">
+      <header class="card-header">
+        <h1>Rendu dynamique — <span class="species-name">{decodedSpecies}</span></h1>
+        <p class="muted">{filtered.length} observation(s) trouvée(s)</p>
+      </header>
+
+      <section class="content">
+        {filtered.length > 0 ? (
+          <div class="graphic-wrapper">
+            <GraphicSpecies species={decodedSpecies} />
+          </div>
+        ) : (
+          <p class="warning">Aucune donnée trouvée pour cette espèce.</p>
+        )}
+      </section>
+
+      <footer class="card-footer">
+        <a class="back" href="/penguin/rendu-dynamique">⬅ Retour à la liste</a>
+        <a class="home" href="/" style="margin-left:1rem;">Accueil</a>
+      </footer>
+    </div>
+  </main>
+</Layout>
+
+<style>
+:root{
+  --bg:#f6fafc;
+  --card:#ffffff;
+  --accent:#0a598d;
+  --muted:#6b7280;
+  --border:#e6eef6;
+  --warning:#b91c1c;
+}
+
+.page{
+  min-height:100vh;
+  padding:2rem;
+  background: linear-gradient(180deg,var(--bg),#eef6fb);
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+}
+
+.card{
+  width:100%;
+  max-width:980px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:1.25rem;
+  box-shadow:0 6px 20px rgba(20,40,60,0.06);
+}
+
+.card-header h1{
+  margin:0 0 .25rem 0;
+  font-size:1.5rem;
+  color:#0f1724;
+}
+
+.species-name{
+  color:var(--accent);
+}
+
+.muted{ color:var(--muted); margin:0; }
+
+.content{ margin-top:1rem; }
+
+.graphic-wrapper{
+  padding:0.75rem;
+  border-radius:8px;
+  background:linear-gradient(180deg,#fff,#fbfdff);
+  border:1px solid #eef7ff;
+}
+
+/* garantir que le SVG du composant s'adapte */
+.graphic-wrapper :global(svg){
+  width:100% !important;
+  height:auto !important;
+  display:block;
+}
+
+/* warning */
+.warning{ color:var(--warning); font-weight:600; }
+
+/* footer */
+.card-footer{
+  margin-top:1.25rem;
+  display:flex;
+  gap:1rem;
+  align-items:center;
+}
+
+.back{
+  color:var(--accent);
+  text-decoration:none;
+  font-weight:600;
+}
+.back:hover{ text-decoration:underline; }
+
+/* responsive */
+@media (max-width:700px){
+  .card{ padding:1rem; border-radius:10px; }
+  .card-header h1{ font-size:1.25rem; }
+}
+</style>

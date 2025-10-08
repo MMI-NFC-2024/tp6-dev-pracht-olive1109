@@ -1,6 +1,7 @@
 ---
 import GraphicSpecies from "../components/GraphicSpecies.astro";
 import penguins from "../assets/penguins.json";
+import Layout from "../layouts/Layout.astro";
 
 // Liste d'espèces déterminée automatiquement
 const speciesList = [...new Set(penguins.map((p) => p.species).filter(Boolean))].sort();
@@ -11,39 +12,42 @@ function slug(s) {
 }
 ---
 
-<main style="background: linear-gradient(90deg, #e0eafc 0%, #cfdef3 100%); min-height: 100vh; padding: 2rem;">
-  <nav>
-    <a href="/" style="margin:0 1rem; color:#0a598d; font-weight:bold; text-decoration:none;">Home</a> |
-    <a href="/test-iframe" style="margin:0 1rem; color:#0a598d; font-weight:bold; text-decoration:none;">Visualisation par IFRAME</a> |
-    <a href="/tabs" style="margin:0 1rem; color:#0a598d; font-weight:bold; text-decoration:none;">Comparaison par onglets</a>
-  </nav>
+<Layout>
+    <main style="background: linear-gradient(90deg, #e0eafc 0%, #cfdef3 100%); min-height: 100vh; padding: 2rem;">
 
-  <h1 style="text-align:center; font-size:2.5rem; margin-bottom:1.5rem; color:#1a2129;">Comparaison graphique des espèces</h1>
+        <h1 style="text-align:center; font-size:2.5rem; margin-bottom:1.5rem; color:#1a2129;">Comparaison graphique des espèces</h1>
+        
+        <nav>
+            <a href="/" style="margin:0 1rem; color:#0a598d; font-weight:bold; text-decoration:none;">Home</a> |
+            <a href="/slider" style="margin:0 1rem; color:#0a598d; font-weight:bold; text-decoration:none;">Comparaison par slider</a> |
+            <a href="/penguin/rendu-dynamique" style="margin:0 1rem; color:#0a598d; font-weight:bold; text-decoration:none;">Rendu dynamique</a> |
+        </nav>
 
-  <nav style="text-align:center; margin-bottom:2rem;">
-    <select id="species-anchor-select" style="font-size:1.2rem; padding:0.5rem 1rem; background:#dee9ff; border:1px solid #18aa25; border-radius:0.5rem;">
-      {speciesList.map((s) => (
-        <option value={slug(s)}>{s}</option>
-      ))}
-    </select>
-  </nav>
+        <nav style="text-align:center; margin-bottom:2rem;">
+            <select id="species-anchor-select" style="font-size:1.2rem; padding:0.5rem 1rem; background:#dee9ff; border:1px solid #18aa25; border-radius:0.5rem;">
+            {speciesList.map((s) => (
+                <option value={slug(s)}>{s}</option>
+            ))}
+            </select>
+        </nav>
 
-  <div class="slider">
-    {speciesList.map((s) => (
-      <section id={slug(s)} class="slide">
-        <h2 style="text-align:center; margin-top:0.5rem;">{s}</h2>
-        <GraphicSpecies species={s} />
-      </section>
-    ))}
-  </div>
-</main>
+        <div class="slider">
+            {speciesList.map((s) => (
+            <section id={slug(s)} class="slide">
+                <h2 style="text-align:center; margin-top:0.5rem;">{s}</h2>
+                <GraphicSpecies species={s} />
+            </section>
+            ))}
+        </div>
+    </main>
+</Layout>
 
 <style>
 .slider {
   display: flex;
   overflow-x: auto;
   scroll-behavior: smooth;
-  width: 42%;
+  width: 74%;
   gap: 0.75rem;
   align-items: align-center;
   padding-bottom: 1rem;

@@ -1,0 +1,106 @@
+---
+import penguins from "../../../assets/penguins.json";
+import Layout from "../../../layouts/Layout.astro";
+
+// Liste unique et triée des espèces
+const speciesList = [...new Set(penguins.map(p => p.species).filter(Boolean))].sort();
+
+// nombre d'enregistrements par espèce
+function countFor(s) {
+  return penguins.filter(p => p.species === s).length;
+}
+---
+
+<Layout>
+  <main class="page">
+    <header class="header">
+      <h1>Rendu dynamique — Liste des espèces</h1>
+      <p class="muted">{speciesList.length} espèce(s) • {penguins.length} enregistrement(s)</p>
+    </header>
+
+    <section class="grid">
+      {speciesList.map((s) => (
+        <a class="card" href={`/penguin/rendu-dynamique/${encodeURIComponent(s)}`}>
+          <div class="card-body">
+            <h2 class="species">{s}</h2>
+            <p class="count">{countFor(s)} enregistrement(s)</p>
+          </div>
+          <div class="card-action">Voir →</div>
+        </a>
+      ))}
+    </section>
+  </main>
+</Layout>
+
+<style>
+:root{
+  --bg:#f6fafc;
+  --card:#ffffff;
+  --accent:#0a598d;
+  --muted:#6b7280;
+  --border:#e6eef6;
+  --accent-2:#18aa25;
+}
+
+.page{
+  min-height:100vh;
+  padding:2rem;
+  background: linear-gradient(180deg,var(--bg),#eef6fb);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:1.25rem;
+}
+
+.header{
+  width:100%;
+  max-width:980px;
+  text-align:left;
+}
+.header h1{ margin:0; color:#0f1724; font-size:1.6rem; }
+.muted{ color:var(--muted); margin:0.25rem 0 0 0; }
+
+/* grille d'espèces */
+.grid{
+  width:100%;
+  max-width:980px;
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap:1rem;
+  margin-top:1rem;
+}
+
+/* carte espèce */
+.card{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:0.9rem 1rem;
+  text-decoration:none;
+  color:inherit;
+  transition:box-shadow .18s, transform .12s;
+}
+.card:hover{
+  box-shadow:0 10px 30px rgba(20,40,60,0.08);
+  transform:translateY(-3px);
+}
+.card-body{ display:flex; flex-direction:column; gap:0.25rem; }
+.species{ margin:0; color:var(--accent); font-size:1.05rem; }
+.count{ margin:0; color:var(--muted); font-size:0.9rem; }
+
+.card-action{
+  color:var(--accent-2);
+  font-weight:700;
+  font-size:0.95rem;
+}
+
+/* responsive */
+@media (max-width:600px){
+  .page{ padding:1rem; }
+  .header h1{ font-size:1.25rem; }
+  .card{ padding:0.75rem; border-radius:8px; }
+}
+</style>
